@@ -11,24 +11,23 @@ import java.util.Objects;
  * @since 2018-08-07
  */
 public class BidIdentity implements Serializable {
+    private Long carId;
 
-    private int carId;
+    private Long userId;
 
-    private int userId;
-
-    public int getCarId() {
+    public Long getCarId() {
         return carId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Long carId) {
         this.carId = carId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

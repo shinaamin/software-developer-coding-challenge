@@ -22,7 +22,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @NotNull
     @Size(min = 2, max = 100)
@@ -39,11 +39,14 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    public Integer getUserId() {
+    @Column(name = "admin", columnDefinition = "TINYINT(1)")
+    private boolean adminUser;
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -69,6 +72,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdminUser() {
+        return adminUser;
+    }
+
+    public void setAdminUser(boolean adminUser) {
+        this.adminUser = adminUser;
     }
 
     @Override

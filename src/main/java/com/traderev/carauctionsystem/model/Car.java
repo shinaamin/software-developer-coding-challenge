@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @Table(name = "cars")
 public class Car implements Serializable {
 
-   public enum Color {
+    public enum Color {
         RED,
         WHITE,
         BLUE,
@@ -32,7 +33,7 @@ public class Car implements Serializable {
         GOLD
     }
 
-   public enum Type {
+    public enum Type {
         HATCHBACK,
         SEDAN,
         MPV,
@@ -42,7 +43,7 @@ public class Car implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "car_id")
-    private Integer carId;
+    private Long carId;
 
     @NotBlank
     @Size(min = 2, max = 20)
@@ -76,16 +77,13 @@ public class Car implements Serializable {
 
     @NotNull
     @Column(name = "min_amt")
-    private Integer minimumBidAmount;
+    private BigDecimal minimumBidAmount;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "car")
-    private List<Bid> bidList;
-
-    public Integer getCarId() {
+    public Long getCarId() {
         return carId;
     }
 
-    public void setCarId(Integer carId) {
+    public void setCarId(Long carId) {
         this.carId = carId;
     }
 
@@ -137,20 +135,12 @@ public class Car implements Serializable {
         this.manufacturerName = manufacturerName;
     }
 
-    public Integer getMinimumBidAmount() {
+    public BigDecimal getMinimumBidAmount() {
         return minimumBidAmount;
     }
 
-    public void setMinimumBidAmount(Integer minimumBidAmount) {
+    public void setMinimumBidAmount(BigDecimal minimumBidAmount) {
         this.minimumBidAmount = minimumBidAmount;
-    }
-
-    public List<Bid> getBidList() {
-        return bidList;
-    }
-
-    public void setBidList(List<Bid> bidList) {
-        this.bidList = bidList;
     }
 
     @Override

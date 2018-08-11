@@ -3,6 +3,7 @@ package com.traderev.carauctionsystem.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,15 +22,15 @@ public class Bid implements Serializable {
 
     @Id
     @Column(name = "car_id")
-    private int carId;
+    private Long carId;
 
     @Id
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     @NotNull
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "bid_amt")
+    private BigDecimal bidAmount;
 
     @Column(name = "creation_date")
     private Date creationDate;
@@ -42,28 +43,28 @@ public class Bid implements Serializable {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    public int getCarId() {
+    public Long getCarId() {
         return carId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Long carId) {
         this.carId = carId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public double getPrice() {
-        return price;
+    public BigDecimal getBidAmount() {
+        return bidAmount;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setBidAmount(BigDecimal bidAmount) {
+        this.bidAmount = bidAmount;
     }
 
     public Date getCreationDate() {
@@ -90,17 +91,19 @@ public class Bid implements Serializable {
         this.user = user;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bid bid = (Bid) o;
-        return Double.compare(bid.price, price) == 0 &&
+        return Objects.equals(carId, bid.carId) &&
+                Objects.equals(userId, bid.userId) &&
                 Objects.equals(creationDate, bid.creationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price, creationDate);
+        return Objects.hash(carId, userId, creationDate);
     }
 }
