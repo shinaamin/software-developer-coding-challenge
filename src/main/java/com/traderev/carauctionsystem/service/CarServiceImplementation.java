@@ -11,14 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author SHINA.
- * @version 1.0
- * @since 2018-08-12
- */
 @Service
 public class CarServiceImplementation implements CarService {
-
 
     @Autowired
     private CarRepository carRepository;
@@ -31,8 +25,8 @@ public class CarServiceImplementation implements CarService {
     @Override
     public Car updateCar(Car car, Long carId) {
         Preconditions.checkArgument(car.getCarId() == carId, "Car Id does not match");
-        Optional<Car> carObj = getCarById(carId);
-        if (carObj.isPresent()) {
+        Car carObj = getCarById(carId);
+        if (carObj != null) {
             car.setCarId(carId);
             carRepository.save(car);
             return car;
@@ -49,13 +43,21 @@ public class CarServiceImplementation implements CarService {
     }
 
     @Override
-    public Optional<Car> getCarById(Long id) {
-        return carRepository.findById(id);
+    public Car getCarById(Long carId) {
+        Optional<Car> car = carRepository.findById(carId);
+        try {
+            return car.get();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     @Override
-    public void deleteCarById(Long id) {
-        carRepository.deleteById(id);
+    public void deleteCarById(Long carId) {
+        boolean carExists = checkCarExistsById(carId);
+        if (carExists) {
+            carRepository.deleteById(carId);
+        }
     }
 
     @Override

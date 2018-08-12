@@ -53,10 +53,10 @@ public class UserControllerTest {
     String bidJson = "{\"userId\":\"1\",\"name\":\"shina\",\"emailId\":\"abc@gmail.com\",\"password\":\"abc123\", \"" +
             "adminUser\":false}";
 
-   // Bid mocKBidResponse = new Bid(1L, 2L, 1230, );
-
     List<User> mockUserList = new ArrayList<>();
     List<Bid> mockBidList = new ArrayList<>();
+
+    Bid mocKBidResponse = new Bid(1L, 2L, 1230, null, null );
 
     @Test
     public void addUser() throws Exception {
@@ -133,7 +133,27 @@ public class UserControllerTest {
 
     @Test
     public void findUserBids() throws Exception{
+        mockBidList.add(hghjgj);
+        Mockito.when(
+                bidService.findUserBids( Mockito.anyLong())).thenReturn(mockUserResponse);
 
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/1").accept(
+                MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        String expected = "{userId:1,name:shina,emailId:abc@gmail.com,password:abc123, adminUser:false}";
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+
+
+      /*  List<Bid> bidList = bidService.findUserBids(userId);
+        if(!CollectionUtils.isEmpty(bidList))
+        {
+            return new ResponseEntity(bidList, HttpStatus.OK);
+        }else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }*/
     }
 
 
