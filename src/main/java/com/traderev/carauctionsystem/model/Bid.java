@@ -43,6 +43,15 @@ public class Bid implements Serializable {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    public Bid() {
+    }
+
+    public Bid(Long carId, Long userId, @NotNull BigDecimal bidAmount) {
+        this.carId = carId;
+        this.userId = userId;
+        this.bidAmount = bidAmount;
+    }
+
     public Long getCarId() {
         return carId;
     }

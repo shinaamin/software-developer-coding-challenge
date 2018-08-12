@@ -18,7 +18,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
@@ -41,6 +40,19 @@ public class User implements Serializable {
 
     @Column(name = "admin", columnDefinition = "TINYINT(1)")
     private boolean adminUser;
+
+    public User()
+    {
+
+    }
+
+    public User(Long userId, String name,String emailId, String password, boolean adminUser) {
+        this.userId = userId;
+        this.name = name;
+        this.emailId = emailId;
+        this.password = password;
+        this.adminUser = adminUser;
+    }
 
     public Long getUserId() {
         return userId;

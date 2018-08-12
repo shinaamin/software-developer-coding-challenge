@@ -21,7 +21,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "cars")
 public class Car implements Serializable {
-
     public enum Color {
         RED,
         WHITE,
@@ -78,6 +77,20 @@ public class Car implements Serializable {
     @NotNull
     @Column(name = "min_amt")
     private BigDecimal minimumBidAmount;
+
+    public  Car()
+    {
+
+    }
+    public Car(String modelNumber, String name, Type type, Color color, Date buildYear, String manufacturerName, BigDecimal minimumBidAmount) {
+        this.modelNumber = modelNumber;
+        this.name = name;
+        this.type = type;
+        this.color = color;
+        this.buildYear = buildYear;
+        this.manufacturerName = manufacturerName;
+        this.minimumBidAmount = minimumBidAmount;
+    }
 
     public Long getCarId() {
         return carId;
@@ -157,5 +170,4 @@ public class Car implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(carId, modelNumber, type, buildYear);
-    }
-}
+    }}
