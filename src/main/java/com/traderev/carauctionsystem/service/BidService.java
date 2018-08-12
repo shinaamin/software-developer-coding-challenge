@@ -14,6 +14,23 @@ import java.util.List;
 public interface BidService {
 
     /**
+     * This method is used to save Bid details.
+     * @param bid  The bid to be saved
+     * @return Bid This returns Bid created.
+     */
+    Bid saveBid(Bid bid);
+
+    /**
+     * This method is used to update Bid details.
+     * @param userId The user id for which bid is to be updated.
+     * @param carId The car id for which bid is to be updated.
+     * @param bid  The bid details to be updated.
+     * @return Bid This returns updated bid.
+     */
+    Bid updateBid(Bid bid, Long userId, Long carId);
+
+
+    /**
      * This method is used to get details of all Bids.
      * @return Bid This returns all the Bids present in system.
      */

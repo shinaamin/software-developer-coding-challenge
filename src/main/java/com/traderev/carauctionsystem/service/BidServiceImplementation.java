@@ -1,19 +1,18 @@
 package com.traderev.carauctionsystem.service;
 
+
 import com.google.common.base.Preconditions;
+import com.traderev.carauctionsystem.exception.ResourceNotFoundException;
 import com.traderev.carauctionsystem.model.Bid;
 import com.traderev.carauctionsystem.model.Car;
 import com.traderev.carauctionsystem.repo.BidRepository;
-import com.traderev.carauctionsystem.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 
@@ -31,7 +30,45 @@ public class BidServiceImplementation implements BidService {
     @Autowired
     private UserService userService;
 
-       @Override
+    @Autowired
+    private CarService carService;
+
+    @Override
+    public Bid saveBid(Bid bid) {
+        //verify user exists
+        Preconditions.checkArgument(userService.checkUserExistsById(bid.getUserId()));
+        // verify bidAmount is greater than or equal to car minimum bid amount
+        Car car = carService.getCarById(bid.getCarId());
+        if(car != null) {
+            BigDecimal minBidAmount = car.getMinimumBidAmount();
+            Preconditions.checkArgument(bid.getBidAmount().compareTo(minBidAmount) >= 0 , "Bidding amount should be greater than or equal to " + minBidAmount);
+
+            Date date = new Date();
+            bid.setCreationDate(date);
+            return bidRepository.save(bid);
+        }
+        else
+        {
+            return  null;
+        }
+    }
+
+    @Override
+    public Bid updateBid(Bid bid, Long userId, Long carId) {
+        Preconditions.checkArgument(userService.checkUserExistsById(userId), "user id does not exist");
+        Preconditions.checkArgument(carService.checkCarExistsById(carId), "car id does not exist");
+
+        Bid bidObj = bidRepository.findByCarIdAndUserId(carId, userId);
+        if (bidObj != null) {
+            bidRepository.save(bid);
+            return bid;
+        } else {
+            throw new ResourceNotFoundException("bid not found");
+        }
+    }
+
+
+    @Override
     public List<Bid> getAllBids() {
         List<Bid> bidList = new ArrayList<>();
         bidRepository.findAll().forEach(e -> bidList.add(e));
@@ -40,7 +77,7 @@ public class BidServiceImplementation implements BidService {
 
     @Override
     public Bid findBid(Long userId, Long carId) {
-      return bidRepository.findByCarIdAndUserId(carId, userId);
+        return bidRepository.findByCarIdAndUserId(carId, userId);
     }
 
     @Override
