@@ -1,9 +1,9 @@
 package com.traderev.carauctionsystem.controller;
 
 import com.traderev.carauctionsystem.model.Bid;
-import com.traderev.carauctionsystem.model.User;
+import com.traderev.carauctionsystem.model.Car;
 import com.traderev.carauctionsystem.service.BidService;
-import com.traderev.carauctionsystem.service.UserService;
+import com.traderev.carauctionsystem.service.CarService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,113 +20,116 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 /**
- * JUnit testing of User Controller class.
+ * JUnit testing of Car Controller class.
  *
  * @author SHINA.
  * @version 1.0
- * @since 2018-08-11
+ * @since 2018-08-12
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
-
+@WebMvcTest(CarController.class)
+public class CarControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private CarService carService;
 
     @MockBean
     private BidService bidService;
 
-    User mockUserResponse = new User(1L, "shina", "abc@gmail.com", "abc123", false);
-    String userJson = "{\"userId\":\"1\",\"name\":\"shina\",\"emailId\":\"abc@gmail.com\",\"password\":\"abc123\", \"" +
-            "adminUser\":false}";
-    Bid mocKBidResponse = new Bid(1L, 2L, new BigDecimal(1000));
+    Car mockCarResponse = new Car("MAF", "Rouge", Car.Type.SUV, Car.Color.BLACK, new Date(), "Nissan", new BigDecimal(1001));
+    String carJson = "{\"modelNumber\":\"MAF\",\"name\":\"Rouge\",\"type\":\"SUV\",\"color\":\"BLACK\", \"buildYear\":\"2018-02-11\", \"manufacturerName\":\"Nissan\", \"minimumBidAmount\":\"1001\"}";
 
-    List<User> mockUserList = new ArrayList<>();
+    List<Car> mockCarList = new ArrayList<>();
     List<Bid> mockBidList = new ArrayList<>();
 
-    @Test
-    public void addUser() throws Exception {
-        Mockito.when(
-                userService.saveUser(Mockito.any(User.class))).thenReturn(mockUserResponse);
+    Bid mockBidResponse = new Bid(1L, 2L, new BigDecimal(1000) );
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/users").accept(
-                MediaType.APPLICATION_JSON).content(userJson).contentType(MediaType.APPLICATION_JSON);
+
+    @Test
+    public void addCar() throws Exception {
+        Mockito.when(
+                carService.saveCar(Mockito.any(Car.class))).thenReturn(mockCarResponse);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/cars").accept(
+                MediaType.APPLICATION_JSON).content(carJson).contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String expected = "{userId:1,name:shina,emailId:abc@gmail.com,password:abc123, adminUser:false}";
+        //String expected = "{modelNumber:MAF,name:Rouge,type:SUV,color:BLACK, buildYear:2018-02-11, manufacturerName:Nissan, minimumBidAmount:1001}";
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+
     }
 
     @Test
-    public void updateUser() throws Exception{
+    public void updateCar() throws Exception{
         Mockito.when(
-                userService.updateUser(Mockito.any(User.class), Mockito.anyLong())).thenReturn(mockUserResponse);
+                carService.updateCar(Mockito.any(Car.class), Mockito.anyLong())).thenReturn(mockCarResponse);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/users/1").accept(
-                MediaType.APPLICATION_JSON).content(userJson).contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/cars/1").accept(
+                MediaType.APPLICATION_JSON).content(carJson).contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String expected = "{userId:1,name:shina,emailId:abc@gmail.com,password:abc123, adminUser:false}";
+        String expected = "{modelNumber:MAF,name:Rouge,type:SUV,color:BLACK, manufacturerName:Nissan, minimumBidAmount:1001}";
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void getUsers() throws Exception {
-        mockUserList.add(mockUserResponse);
+    public void getCars() throws Exception{
+        mockCarList.add(mockCarResponse);
         Mockito.when(
-                userService.getAllUsers()).thenReturn(mockUserList);
+                carService.getAllCars()).thenReturn(mockCarList);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars");
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String expected = "[{userId:1,name:shina,emailId:abc@gmail.com,password:abc123, adminUser:false}]";
+        String expected = "[{modelNumber:MAF,name:Rouge,type:SUV,color:BLACK, manufacturerName:Nissan, minimumBidAmount:1001}]";
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void findUserById() throws Exception{
+    public void findCarById() throws Exception {
         Mockito.when(
-                userService.getUserById( Mockito.anyLong())).thenReturn(mockUserResponse);
+                carService.getCarById(Mockito.anyLong())).thenReturn(mockCarResponse);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars/1");
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String expected = "{userId:1,name:shina,emailId:abc@gmail.com,password:abc123, adminUser:false}";
+        String expected = "{modelNumber:MAF,name:Rouge,type:SUV,color:BLACK, manufacturerName:Nissan, minimumBidAmount:1001}";
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+
     }
 
     @Test
-    public void deleteUserById() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/users/1");
+    public void deleteCarById() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/cars/1");
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
-    public void findUserBids() throws Exception{
-        mockBidList.add(mocKBidResponse);
+    public void findCarBidHistory() throws Exception {
+        mockBidList.add(mockBidResponse);
         Mockito.when(
-                bidService.findUserBids( Mockito.anyLong())).thenReturn(mockBidList);
+                bidService.findCarBids(Mockito.anyLong())).thenReturn(mockBidList);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/2/bids");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars/1/bids");
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
@@ -137,14 +139,15 @@ public class UserControllerTest {
     }
 
     @Test
-    public void findUserBidOnCar() throws Exception{
+    public void findCarWinningBid() throws Exception {
         Mockito.when(
-                bidService.findUserBidOnCar( Mockito.anyLong(), Mockito.anyLong())).thenReturn(mocKBidResponse);
+                bidService.findCarWinningBid(Mockito.anyLong())).thenReturn(mockBidResponse);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/2/bid?carId=1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars/1/winningBid");
+
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String expected = "{carId:1,userId:2, bidAmount:1000}";
+        String expected = "{carId:1,userId:2,bidAmount:1000}";
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
