@@ -7,7 +7,7 @@ This is a coding challenge for software developer applicants applying through ht
 - Java 8
 - Maven
 
-#####Framework & Libraries Used:
+##### Framework & Libraries Used:
 - Java 8(JDK 8u131)
 - Maven3
 - Spring Boot 2.0.4
@@ -15,7 +15,7 @@ This is a coding challenge for software developer applicants applying through ht
 - H2 In-Memory Database Engine
 - Apache Web Server
 
-#####Unit Tests:
+##### Unit Tests:
 Spring JUnit
 
 ##### URls:
@@ -35,7 +35,7 @@ Spring JUnit
 ##### Running the tests
 > All tests are in test package.
 
-#####References:
+##### References:
 - https://spring.io/guides/gs/rest-service/
 - http://www.springboottutorial.com/spring-boot-and-spring-jdbc-with-h2
 
