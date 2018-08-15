@@ -38,8 +38,7 @@ public class UserController {
     private BidService bidService;
 
     @ApiOperation(
-            value = "Create user.",
-            notes = "Not available.")
+            value = "Create user.")
     @RequestMapping(method = POST)
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         User usr = userService.saveUser(user);
@@ -47,8 +46,7 @@ public class UserController {
     }
 
     @ApiOperation(
-            value = "Update user.",
-            notes = "Not available.")
+            value = "Update user.")
     @RequestMapping(method = PUT, value = "/{userId}")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user, @PathVariable Long userId) {
         User usr = userService.updateUser(user, userId);
@@ -57,8 +55,7 @@ public class UserController {
 
 
     @ApiOperation(
-            value = "get all users.",
-            notes = "Not available.")
+            value = "Get all users.")
     @RequestMapping(method = GET)
     public ResponseEntity<List<User>> getUsers() {
         List<User> list = userService.getAllUsers();
@@ -66,8 +63,7 @@ public class UserController {
     }
 
     @ApiOperation(
-            value = "get car",
-            notes = "Not available.")
+            value = "Get user.")
     @RequestMapping(method = GET, value = "/{userId}")
     public ResponseEntity<User> findUserById(@PathVariable("userId") Long userId) {
         User user = userService.getUserById(userId);
@@ -80,17 +76,14 @@ public class UserController {
     }
 
     @ApiOperation(
-            value = "delete user",
-            notes = "Not available.")
+            value = "Delete user.")
     @RequestMapping(method = DELETE, value = "/{userId}")
     public ResponseEntity deleteUserById(@PathVariable("userId") Long userId) {
         userService.deleteUserById(userId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(
-            value = "get all bids of user",
-            notes = "Not available.")
+    @ApiOperation(value = "Get all bids of user.")
     @RequestMapping(method = GET, value = "/{userId}/bids")
     public ResponseEntity<List<Bid>> findUserBids(@NotNull @PathVariable("userId") Long userId) {
         List<Bid> bidList = bidService.findUserBids(userId);
@@ -102,9 +95,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(
-            value = "get all bids of user",
-            notes = "Not available.")
+    @ApiOperation(value = "Get latest user bid for specific car.")
     @RequestMapping(method = GET, value = "/{userId}/bid")
     public ResponseEntity<List<Bid>> findUserBidOnCar(@NotNull @PathVariable("userId") Long userId,
                                                       @NotNull @RequestParam("carId") Long carId) {

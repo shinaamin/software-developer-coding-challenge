@@ -1,12 +1,8 @@
 package com.traderev.carauctionsystem.controller;
 
-import com.google.common.base.Preconditions;
 import com.traderev.carauctionsystem.model.Bid;
 import com.traderev.carauctionsystem.model.Car;
-import com.traderev.carauctionsystem.model.User;
 import com.traderev.carauctionsystem.service.BidService;
-import com.traderev.carauctionsystem.service.CarService;
-import com.traderev.carauctionsystem.model.Car;
 import com.traderev.carauctionsystem.service.CarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -57,15 +52,14 @@ public class CarController {
         return new ResponseEntity(carObj, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "get all cars.")
+    @ApiOperation(value = "Get all cars details.")
     @RequestMapping(method = GET)
     public ResponseEntity<List<Car>> getCars() {
         List<Car> list = carService.getAllCars();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @ApiOperation(
-            value = "get car")
+    @ApiOperation(value = "Get car details.")
     @RequestMapping(method = GET, value = "/{carId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Car> findCarById(@PathVariable("carId") Long carId) {
         Car car = carService.getCarById(carId);
@@ -76,18 +70,14 @@ public class CarController {
         }
     }
 
-    @ApiOperation(
-            value = "delete car",
-            notes = "Not available.")
+    @ApiOperation(value = "Delete car.")
     @RequestMapping(method = DELETE, value = "/{carId}")
     public ResponseEntity deleteCarById(@PathVariable("carId") Long carId) {
         carService.deleteCarById(carId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(
-            value = "get all bids of car",
-            notes = "Not available.")
+    @ApiOperation(value = "Get all bids of car.")
     @RequestMapping(method = GET, value = "/{carId}/bids")
     public ResponseEntity<List<Bid>> findCarBidHistory(@NotNull @PathVariable("carId") Long carId) {
         List<Bid> bidList = bidService.findCarBids(carId);
@@ -99,9 +89,7 @@ public class CarController {
     }
 
     @ApiOperation(
-            value = "get winning bid of car.",
-            notes = "Not available.",
-            produces = "application/json")
+            value = "Get winning bid of car.")
     @RequestMapping(method = GET, value = "/{carId}/winningBid")
     public ResponseEntity<Bid> findCarWinningBid(@PathVariable("carId") Long carId) {
         Bid bidObj = bidService.findCarWinningBid(carId);

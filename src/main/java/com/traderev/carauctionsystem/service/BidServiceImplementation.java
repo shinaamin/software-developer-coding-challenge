@@ -9,12 +9,11 @@ import com.traderev.carauctionsystem.repo.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-
 
 /**
  * @author SHINA.
@@ -36,20 +35,20 @@ public class BidServiceImplementation implements BidService {
     @Override
     public Bid saveBid(Bid bid) {
         //verify user exists
-        Preconditions.checkArgument(userService.checkUserExistsById(bid.getUserId()));
+        Preconditions.checkArgument(userService.checkUserExistsById(bid.getUserId()), "user does not exists");
+        //verify user exists
+        Preconditions.checkArgument(carService.checkCarExistsById(bid.getCarId()), "car does not exists");
         // verify bidAmount is greater than or equal to car minimum bid amount
         Car car = carService.getCarById(bid.getCarId());
-        if(car != null) {
+        if (car != null) {
             BigDecimal minBidAmount = car.getMinimumBidAmount();
-            Preconditions.checkArgument(bid.getBidAmount().compareTo(minBidAmount) >= 0 , "Bidding amount should be greater than or equal to " + minBidAmount);
+            Preconditions.checkArgument(bid.getBidAmount().compareTo(minBidAmount) >= 0, "Bidding amount should be greater than or equal to " + minBidAmount);
 
             Date date = new Date();
             bid.setCreationDate(date);
             return bidRepository.save(bid);
-        }
-        else
-        {
-            return  null;
+        } else {
+            return null;
         }
     }
 
@@ -66,7 +65,6 @@ public class BidServiceImplementation implements BidService {
             throw new ResourceNotFoundException("bid not found");
         }
     }
-
 
     @Override
     public List<Bid> getAllBids() {
@@ -102,6 +100,11 @@ public class BidServiceImplementation implements BidService {
 
     @Override
     public Bid findUserBidOnCar(Long userId, Long carId) {
+        //verify user exists
+        Preconditions.checkArgument(userService.checkUserExistsById(userId), "user does not exists");
+        //verify user exists
+        Preconditions.checkArgument(carService.checkCarExistsById(carId), "car does not exists");
+
         return bidRepository.findByCarIdAndUserId(carId, userId);
     }
 

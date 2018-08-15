@@ -52,7 +52,7 @@ public class CarControllerTest {
     List<Car> mockCarList = new ArrayList<>();
     List<Bid> mockBidList = new ArrayList<>();
 
-    Bid mockBidResponse = new Bid(1L, 2L, new BigDecimal(1000) );
+    Bid mockBidResponse = new Bid(1L, 2L, new BigDecimal(1000));
 
 
     @Test
@@ -65,13 +65,11 @@ public class CarControllerTest {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        //String expected = "{modelNumber:MAF,name:Rouge,type:SUV,color:BLACK, buildYear:2018-02-11, manufacturerName:Nissan, minimumBidAmount:1001}";
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-
     }
 
     @Test
-    public void updateCar() throws Exception{
+    public void updateCar() throws Exception {
         Mockito.when(
                 carService.updateCar(Mockito.any(Car.class), Mockito.anyLong())).thenReturn(mockCarResponse);
 
@@ -86,7 +84,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void getCars() throws Exception{
+    public void getCars() throws Exception {
         mockCarList.add(mockCarResponse);
         Mockito.when(
                 carService.getAllCars()).thenReturn(mockCarList);

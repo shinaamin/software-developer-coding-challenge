@@ -4,8 +4,6 @@ import com.traderev.carauctionsystem.model.Bid;
 
 import java.util.List;
 
-
-
 /**
  * @author SHINA.
  * @version 1.0

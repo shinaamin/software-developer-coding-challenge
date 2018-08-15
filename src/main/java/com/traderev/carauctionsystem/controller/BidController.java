@@ -33,21 +33,20 @@ public class BidController {
     @Autowired
     private BidService bidService;
 
-    @ApiOperation(value = "Create or update bid of car.")
-    @RequestMapping(method = {POST,PUT})
+    @ApiOperation(value = "Create or update bid of car."
+            , notes = "If bid already exists for car by user then it will just update existing bid else it will create new bid in database.")
+    @RequestMapping(method = {POST, PUT})
     public ResponseEntity addOrUpdateBid(@Valid @RequestBody Bid bid) {
+        //If bid already exists for car by user then it will just update existing bid else it will create new bid in database.
         Bid bidObj = bidService.saveBid(bid);
-        if( bidObj != null)
-        {
+        if (bidObj != null) {
             return new ResponseEntity(bidObj, HttpStatus.CREATED);
-        }
-        else
-        {
+        } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
-    @ApiOperation(value = "get all bids available in system.")
+    @ApiOperation(value = "Get all bids available in system.")
     @RequestMapping(method = GET)
     public ResponseEntity<List<Bid>> getBids() {
         List<Bid> list = bidService.getAllBids();
