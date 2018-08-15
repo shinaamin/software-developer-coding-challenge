@@ -6,6 +6,8 @@ import com.traderev.carauctionsystem.service.BidService;
 import com.traderev.carauctionsystem.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/users")
 @Api(value = "users", description = "All user related info", tags = "users")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
 
@@ -41,6 +46,7 @@ public class UserController {
             value = "Create user.")
     @RequestMapping(method = POST)
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+        logger.debug("Executing addUser method in UserController class");
         User usr = userService.saveUser(user);
         return new ResponseEntity(usr, HttpStatus.CREATED);
     }
@@ -48,7 +54,8 @@ public class UserController {
     @ApiOperation(
             value = "Update user.")
     @RequestMapping(method = PUT, value = "/{userId}")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user, @PathVariable Long userId) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user, @NotNull @PathVariable Long userId) {
+        logger.debug("Executing updateUser method in UserController class");
         User usr = userService.updateUser(user, userId);
         return new ResponseEntity(usr, HttpStatus.OK);
     }
@@ -57,16 +64,17 @@ public class UserController {
     @ApiOperation(
             value = "Get all users.")
     @RequestMapping(method = GET)
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> list = userService.getAllUsers();
+    public ResponseEntity<List<User>> findUsers() {
+        logger.debug("Executing findUsers method in UserController class");
+        List<User> list = userService.findAllUsers();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @ApiOperation(
-            value = "Get user.")
+    @ApiOperation(value = "Get user.")
     @RequestMapping(method = GET, value = "/{userId}")
-    public ResponseEntity<User> findUserById(@PathVariable("userId") Long userId) {
-        User user = userService.getUserById(userId);
+    public ResponseEntity<User> findUserById(@NotNull @PathVariable("userId") Long userId) {
+        logger.debug("Executing findUserById method in UserController class");
+        User user = userService.findUserById(userId);
         if(user != null)
         {
             return new ResponseEntity(user, HttpStatus.OK);
@@ -78,7 +86,8 @@ public class UserController {
     @ApiOperation(
             value = "Delete user.")
     @RequestMapping(method = DELETE, value = "/{userId}")
-    public ResponseEntity deleteUserById(@PathVariable("userId") Long userId) {
+    public ResponseEntity deleteUserById(@NotNull @PathVariable("userId") Long userId) {
+        logger.debug("Executing deleteUserById method in UserController class");
         userService.deleteUserById(userId);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -86,6 +95,7 @@ public class UserController {
     @ApiOperation(value = "Get all bids of user.")
     @RequestMapping(method = GET, value = "/{userId}/bids")
     public ResponseEntity<List<Bid>> findUserBids(@NotNull @PathVariable("userId") Long userId) {
+        logger.debug("Executing findUserBids method in UserController class");
         List<Bid> bidList = bidService.findUserBids(userId);
         if(!CollectionUtils.isEmpty(bidList))
         {
@@ -99,6 +109,7 @@ public class UserController {
     @RequestMapping(method = GET, value = "/{userId}/bid")
     public ResponseEntity<List<Bid>> findUserBidOnCar(@NotNull @PathVariable("userId") Long userId,
                                                       @NotNull @RequestParam("carId") Long carId) {
+        logger.debug("Executing findUserBidOnCar method in UserController class");
         Bid bidObj = bidService.findUserBidOnCar(userId, carId);
         if(bidObj != null)
         {

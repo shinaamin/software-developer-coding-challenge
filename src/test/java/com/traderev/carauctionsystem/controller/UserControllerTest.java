@@ -89,7 +89,7 @@ public class UserControllerTest {
     public void getUsers() throws Exception {
         mockUserList.add(mockUserResponse);
         Mockito.when(
-                userService.getAllUsers()).thenReturn(mockUserList);
+                userService.findAllUsers()).thenReturn(mockUserList);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users");
 
@@ -103,7 +103,7 @@ public class UserControllerTest {
     @Test
     public void findUserById() throws Exception{
         Mockito.when(
-                userService.getUserById( Mockito.anyLong())).thenReturn(mockUserResponse);
+                userService.findUserById( Mockito.anyLong())).thenReturn(mockUserResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/1");
 

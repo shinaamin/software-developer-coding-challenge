@@ -87,7 +87,7 @@ public class CarControllerTest {
     public void getCars() throws Exception {
         mockCarList.add(mockCarResponse);
         Mockito.when(
-                carService.getAllCars()).thenReturn(mockCarList);
+                carService.findAllCars()).thenReturn(mockCarList);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars");
 
@@ -101,7 +101,7 @@ public class CarControllerTest {
     @Test
     public void findCarById() throws Exception {
         Mockito.when(
-                carService.getCarById(Mockito.anyLong())).thenReturn(mockCarResponse);
+                carService.findCarById(Mockito.anyLong())).thenReturn(mockCarResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/cars/1");
 

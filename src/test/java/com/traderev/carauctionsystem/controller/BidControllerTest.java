@@ -59,8 +59,7 @@ public class BidControllerTest {
     @Test
     public void getBids() throws Exception {
         mockBidList.add(mockBidResponse);
-        Mockito.when(
-                bidService.getAllBids()).thenReturn(mockBidList);
+        Mockito.when(bidService.findAllBids()).thenReturn(mockBidList);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/bids");
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();

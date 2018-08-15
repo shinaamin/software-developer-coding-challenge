@@ -4,6 +4,8 @@ import com.traderev.carauctionsystem.model.Bid;
 import com.traderev.carauctionsystem.service.BidService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @RequestMapping("/bids")
 @Api(value = "bids", description = "All bids related info", tags = "bids")
 public class BidController {
+    private static final Logger logger = LoggerFactory.getLogger(BidController.class);
+
     @Autowired
     private BidService bidService;
 
@@ -37,6 +41,7 @@ public class BidController {
             , notes = "If bid already exists for car by user then it will just update existing bid else it will create new bid in database.")
     @RequestMapping(method = {POST, PUT})
     public ResponseEntity addOrUpdateBid(@Valid @RequestBody Bid bid) {
+        logger.debug("Executing addOrUpdateBid method in BidController class");
         //If bid already exists for car by user then it will just update existing bid else it will create new bid in database.
         Bid bidObj = bidService.saveBid(bid);
         if (bidObj != null) {
@@ -49,7 +54,8 @@ public class BidController {
     @ApiOperation(value = "Get all bids available in system.")
     @RequestMapping(method = GET)
     public ResponseEntity<List<Bid>> getBids() {
-        List<Bid> list = bidService.getAllBids();
+        logger.debug("Executing getBids method in BidController class");
+        List<Bid> list = bidService.findAllBids();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

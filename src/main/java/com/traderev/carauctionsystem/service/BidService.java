@@ -32,7 +32,7 @@ public interface BidService {
      * This method is used to get details of all Bids.
      * @return Bid This returns all the Bids present in system.
      */
-    List<Bid> getAllBids();
+    List<Bid> findAllBids();
 
     /**
      * This method is used to find Bid by using carId and UserId.
